@@ -518,6 +518,8 @@ class AccountBankStatementLine(osv.osv):
                     account_group[move_line_id.account_id.id][1] = \
                         move_line_id.id
 
+        if move_line.invoice and move_line.invoice.from_invoice_pay:
+            account_group = {}
         for move_account_tax in account_group:
             amount_base_secondary = 0
             tax_ids = tax_obj.search(
