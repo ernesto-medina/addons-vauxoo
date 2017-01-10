@@ -462,7 +462,6 @@ class AccountBankStatementLine(osv.osv):
         return [statement_amount, counterpart_amount, counterpart_unreconcile]
 
     def _get_move_line_tax(self, cr, uid, mv_line_dicts, context=None):
-
         tax_obj = self.pool.get('account.tax')
         move_line_obj = self.pool.get('account.move.line')
 
@@ -518,8 +517,11 @@ class AccountBankStatementLine(osv.osv):
                     account_group[move_line_id.account_id.id][1] = \
                         move_line_id.id
 
-        if move_line.invoice and move_line.invoice.from_invoice_pay:
-            account_group = {}
+        for move_line in move_line_obj.browse(
+                cr, uid, counterpart_move_line_ids, context=context):
+            if move_line and move_line.invoice and move_line.invoice.from_invoice_pay:
+                account_group = {}
+
         for move_account_tax in account_group:
             amount_base_secondary = 0
             tax_ids = tax_obj.search(
